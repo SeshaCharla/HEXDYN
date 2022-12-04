@@ -40,13 +40,15 @@ We have the propeller normals in body-frame:
     &= -(-1)^i s_{\alpha} s_{\gamma_i} \pmb b_x + (-1)^{i} s_{\alpha} c_{\gamma_i} \pmb b_y - c_{\alpha} \pmb b_z
 \end{align*}
 $$\therefore \pmb{n}_i = \begin{bmatrix}
-    (-1)^{i+1} s_{\alpha} s_{\gamma_i} &  (-1)^{i} s_{\alpha} c_{\gamma_i} & - c_{\alpha}
+    \underbrace{(-1)^{i+1} s_{\alpha} s_{\gamma_i}}_{n_{ix}} &
+    \underbrace{(-1)^{i} s_{\alpha} c_{\gamma_i}}_{n_{iy}} &
+    \underbrace{- c_{\alpha}}_{n_{iz}}
 \end{bmatrix} \begin{bmatrix}
     \pmb b_x \\ \pmb b_y \\ \pmb b_z
 \end{bmatrix}
 $$
 Thus, using the above definitions, we have the angular velocity vecotor of $i^{th}$ propeller:
-$$\pmb \omega_i = (-1)^{i} \omega_i \pmb n_i \qquad \text{where, }\omega_i \geq 0 \quad \forall i = 1, 2, \hdots, 6$$
+$${}^B\pmb \omega_i = (-1)^{i} \omega_i \pmb n_i \qquad \text{where, }\omega_i \geq 0 \quad \forall i = 1, 2, \hdots, 6$$
 
 %===
 
@@ -102,7 +104,7 @@ $$R_{\psi}R_{\theta}R_{\phi} =\displaystyle \left[\begin{matrix}\cos{\left(\psi
 
 Using the above definitions of rotations, we have the instantaneous angular velocity of the body as:
 \begin{align*}
-    \pmb \Omega &= \dot \phi \pmb l_x + \dot \theta \pmb l_y + \dot \psi \pmb l_z\\
+    {}^R\pmb \Omega^B &= \dot \phi \pmb l_x + \dot \theta \pmb l_y + \dot \psi \pmb l_z\\
 \end{align*}
 The vectors $\{ \pmb l_x, \pmb l_y, \pmb l_z\}$ can be written in terms of $\{ \pmb b_x, \pmb b_y, \pmb b_z\}$ as follows:
 \begin{align*}
@@ -123,11 +125,11 @@ The vectors $\{ \pmb l_x, \pmb l_y, \pmb l_z\}$ can be written in terms of $\{ \
 
 Hence,
 \begin{align*}
-    \pmb \Omega &=
+    {}^R\pmb \Omega^B &=
         \dot \phi \begin{bmatrix} c_{\theta}c_{\psi} & -c_{\theta}s_{\psi} &
         s_{\theta} \end{bmatrix}\begin{bmatrix} \pmb b_x \\ \pmb b_y \\ \pmb
         b_z\\\end{bmatrix} +
-        \dot \theta \begin{bmatrix} c_{\psi} & s_{\psi} & 0
+        \dot \theta \begin{bmatrix} s_{\psi} & c_{\psi} & 0
         \end{bmatrix}\begin{bmatrix} \pmb b_x \\ \pmb b_y \\ \pmb
         b_z\\\end{bmatrix} +
         \dot \psi \begin{bmatrix} 0 & 0 & 1\end{bmatrix}
@@ -137,18 +139,18 @@ Hence,
 
 Let,
 \begin{align*}
-    \pmb \Omega &= \Omega_x \pmb b_x + \Omega_y \pmb b_y + \Omega_z \pmb b_z\\
+    {}^R\pmb \Omega^B  &= \Omega_x \pmb b_x + \Omega_y \pmb b_y + \Omega_z \pmb b_z\\
 \end{align*}
 
 combaring the coefficients,
 \begin{align*}
     \begin{bmatrix}
-        \Omega_1 \\ \Omega_2 \\ \Omega_3
+        \Omega_x \\ \Omega_y \\ \Omega_z
     \end{bmatrix}
     &=
     \begin{bmatrix}
-        c_{\theta}c_{\psi} &  c_{\psi} & 0\\
-        -c_{\theta}s_{\psi} & s_{\psi} & 0\\
+        c_{\theta}c_{\psi} &  s_{\psi} & 0\\
+        -c_{\theta}s_{\psi} & c_{\psi} & 0\\
         s_{\theta} & 0 & 1
     \end{bmatrix}
     \begin{bmatrix}
@@ -157,3 +159,85 @@ combaring the coefficients,
 \end{align*}
 
 Thus the instantaneous angular velocity is purely a function of $\dot \phi , \dot \theta , \dot \psi $.
+
+
+%===
+\subsection{Inertial moments due to propeller angular momentum}
+We have, angular velocity of the propeller $i$ in inertial frame:
+$${}^R \pmb \omega_i = {}^R \pmb \Omega^B + {}^B \pmb \omega_i$$
+Hence, angular acceleration in reference frame:
+\begin{align*}
+    \frac{{}^R d \pmb \omega_i}{dt} &= \frac{{}^R d}{dt}\left( {}^R \pmb \Omega^B + {}^B \pmb \omega_i \right)\\
+    &= \underbrace{\frac{{}^R d \pmb \Omega^B}{dt}}_{{}^R\pmb\alpha^B} + \frac{{}^R d{}^B \pmb \omega_i}{dt}
+\end{align*}
+Consider,
+\begin{align*}
+    \frac{{}^R d{}^B \pmb \omega_i}{dt} &= \frac{{}^R d}{dt} (-1)^{i} \omega_i \pmb n_i\\
+    &= \underbrace{(-1)^{i} \frac{{}^R d\omega_i }{dt} \pmb n_i}_{{}^B \pmb \alpha_i} +
+    (-1)^{i} \omega_i \frac{{}^R d\pmb n_i}{dt}
+\end{align*}
+
+We have,
+\begin{align*}
+    \frac{{}^R d\pmb n_i}{dt} &= {}^R \pmb \Omega^B \times \pmb n_i\\
+    &= \begin{bmatrix}
+        \Omega_y n_{iz} - \Omega_z n_{iy} &
+        \Omega_z n_{ix} - \Omega_x n_{iz} &
+        \Omega_x n_{iy} - \Omega_y n_{ix}
+    \end{bmatrix}
+    \begin{bmatrix}
+    \pmb b_x \\ \pmb b_y \\ \pmb b_z\\
+    \end{bmatrix}
+\end{align*}
+
+Let, $\dot \varepsilon  = \begin{bmatrix} \dot \phi & \dot \theta & \dot \psi \end{bmatrix}$. We have,
+
+\begin{alignat*}{3}
+        \Omega_x &=  c_{\theta}c_{\psi} \dot \phi + s_{\psi} \dot \theta \qquad
+        \Omega_y &&= -c_{\theta}s_{\psi} \dot \phi + c_{\psi} \dot \theta \qquad
+        \Omega_z &&= s_{\theta} \dot \phi + \dot \psi\\
+        n_{ix}   &=  (-1)^{i+1} s_{\alpha} s_{\gamma_i} \qquad
+        n_{iy}   &&= (-1)^{i} s_{\alpha} c_{\gamma_i}  \qquad \qquad
+        n_{iz}   &&= -c_{\alpha}
+\end{alignat*}
+
+Calculating the individual terms:
+\begin{align*}
+    \Omega_y n_{iz} - \Omega_z n_{iy} &=
+    \begin{bmatrix}
+        \dot \phi & \dot \theta & \dot \psi
+    \end{bmatrix}
+    \begin{bmatrix}
+        (-1)^{i+1} s_{\theta} s_{\alpha} c_{\gamma_i} + s_{\psi} c_{\theta} c_{\alpha}\\
+        -c_{\psi} c_{\alpha}\\
+        (-1)^{i+1} s_{\alpha} c{\gamma_i}
+    \end{bmatrix}\\
+    %===
+    \Omega_z n_{ix} - \Omega_x n_{iz} &=
+    \begin{bmatrix}
+        \dot \phi & \dot \theta & \dot \psi
+    \end{bmatrix}
+    \begin{bmatrix}
+        (-1)^{i+1} s_{\theta} s_{\alpha} s_{\gamma_i} + c_{\psi} c_{\theta} c_{\alpha}\\
+        s_{\psi} c_{\alpha}\\
+        (-1)^{i+1} s_{\alpha} s_{\gamma_i}\\
+    \end{bmatrix}\\
+    %===
+    \Omega_x n_{iy} - \Omega_y n_{ix} &=
+    \begin{bmatrix}
+        \dot \phi & \dot \theta & \dot \psi
+    \end{bmatrixo}
+    \begin{bmatrix}
+        (-1)^{i} c_{\theta}s_{\alpha} (c_{\gamma_i}c_{\psi} - s_{gamma_i} s_{\psi})\\
+        (-1)^{i} s_{\alpha} (s_{\gamma_i} c_{\psi} + c_{\gamma_i} s_{\psi})\\
+        0
+    \end{bmatrix}
+\end{align*}
+
+
+The inertial force associated with the above motion is:
+\begin{align*}
+    F_g =  (-i)^{i} I_p\omega_i G(\phi, \theta, \psi) \begin{bmatrix}
+        \dot \phi \\ \dot \theta \\ \dot \psi
+    \end{bmatrix}
+\end{align*}
