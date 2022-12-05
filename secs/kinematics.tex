@@ -26,10 +26,30 @@ Let, $b$ be the body-frame with $\{\pmb{b_x \, b_y \, b_z}\}$ as 3 mutually perp
 \end{align*}
 
 Let, $\gamma_i$ be the angle of the $i^{th}$ propeller shaft along $\pmb{b_z}$ (clockwise), i.e.,
-\begin{align*}
-\gamma_i &= \frac{i\pi}{3} - \frac{\pi}{6} = (2i-1)\frac{\pi}{6}\\
-\implies \pmb r_i &= \cos \gamma_i \pmb b_x + \sin \gamma_i \pmb b_y
-\end{align*}
+\begin{figure}[H]
+    \begin{minipage}{0.49 \textwidth}
+            \begin{align*}
+            \gamma_i &= \frac{i\pi}{3} - \frac{\pi}{6} = (2i-1)\frac{\pi}{6}\\
+            \implies \pmb r_i &= \cos \gamma_i \pmb b_x + \sin \gamma_i \pmb b_y
+            \end{align*}
+    \end{minipage}
+    \begin{minipage}{0.49 \textwidth}
+        \begin{table}[H]
+            \centering
+            \begin{tabular}{c c c c }
+                \hline \hline
+                $i$ & $\gamma_i$ & $c_{\gamma_i}$ & $s_{\gamma_i}$ \\ \hline \hline
+                $1$ & $\frac{\pi}{6} = 30^o$   & $\frac{\sqrt{3}}{2}$ & $\frac{1}{2}$ \\
+                $2$ & $\frac{\pi}{2} = 90^o$   & $0$ & $1$ \\
+                $3$ & $\frac{5\pi}{6} = 150^o$ & $-\frac{\sqrt{3}}{2}$ & $\frac{1}{2}$ \\
+                $4$ & $\frac{7\pi}{6} = 210^o$ & $-\frac{\sqrt{3}}{2}$ & $-\frac{1}{2}$ \\
+                $5$ & $\frac{3\pi}{2} = 270^o$ & 0 & $-1$ \\
+                $6$ & $\frac{11\pi}{6} = 330^o$& $\frac{\sqrt{3}}{2}$ & $-\frac{1}{2}$ \\
+                \hline \hline
+            \end{tabular}
+        \end{table}
+    \end{minipage}
+\end{figure}
 
 We have the propeller normals in body-frame:
 \begin{align*}
@@ -162,25 +182,25 @@ Thus the instantaneous angular velocity is purely a function of $\dot \phi , \do
 
 
 %===
-\subsection{Inertial moments due to propeller angular momentum}
+\subsection{Inertial moments due to propeller angular momentum (gyroscopic effect)}
 We have, angular velocity of the propeller $i$ in inertial frame:
 $${}^R \pmb \omega_i = {}^R \pmb \Omega^B + {}^B \pmb \omega_i$$
 Hence, angular acceleration in reference frame:
 \begin{align*}
-    \frac{{}^R d \pmb \omega_i}{dt} &= \frac{{}^R d}{dt}\left( {}^R \pmb \Omega^B + {}^B \pmb \omega_i \right)\\
-    &= \underbrace{\frac{{}^R d \pmb \Omega^B}{dt}}_{{}^R\pmb\alpha^B} + \frac{{}^R d{}^B \pmb \omega_i}{dt}
+    \frac{{}^R d \pmb \omega_i}{dt} &= \frac{{}^R d}{dt}\left( {}^R \pmb \Omega^B + {}^B \pmb \omega_i \right)
+    = \underbrace{\frac{{}^R d \pmb \Omega^B}{dt}}_{{}^R\pmb\alpha^B} + \frac{{}^R d{}^B \pmb \omega_i}{dt}
 \end{align*}
 Consider,
 \begin{align*}
-    \frac{{}^R d{}^B \pmb \omega_i}{dt} &= \frac{{}^R d}{dt} (-1)^{i} \omega_i \pmb n_i\\
-    &= \underbrace{(-1)^{i} \frac{{}^R d\omega_i }{dt} \pmb n_i}_{{}^B \pmb \alpha_i} +
+    \frac{{}^R d{}^B \pmb \omega_i}{dt} &= \frac{{}^R d}{dt} (-1)^{i} \omega_i \pmb n_i
+    = \underbrace{(-1)^{i} \frac{{}^R d\omega_i }{dt} \pmb n_i}_{{}^B \pmb \alpha_i} +
     (-1)^{i} \omega_i \frac{{}^R d\pmb n_i}{dt}
 \end{align*}
 
 We have,
 \begin{align*}
-    \frac{{}^R d\pmb n_i}{dt} &= {}^R \pmb \Omega^B \times \pmb n_i\\
-    &= \begin{bmatrix}
+    \frac{{}^R d\pmb n_i}{dt} &= {}^R \pmb \Omega^B \times \pmb n_i
+    = \begin{bmatrix}
         \Omega_y n_{iz} - \Omega_z n_{iy} &
         \Omega_z n_{ix} - \Omega_x n_{iz} &
         \Omega_x n_{iy} - \Omega_y n_{ix}
@@ -190,7 +210,7 @@ We have,
     \end{bmatrix}
 \end{align*}
 
-Let, $\dot \varepsilon  = \begin{bmatrix} \dot \phi & \dot \theta & \dot \psi \end{bmatrix}$. We have,
+Let, $\dot \varepsilon^T  = \begin{bmatrix} \dot \phi & \dot \theta & \dot \psi \end{bmatrix}$. We have,
 
 \begin{alignat*}{3}
         \Omega_x &=  c_{\theta}c_{\psi} \dot \phi + s_{\psi} \dot \theta \qquad
@@ -226,18 +246,57 @@ Calculating the individual terms:
     \Omega_x n_{iy} - \Omega_y n_{ix} &=
     \begin{bmatrix}
         \dot \phi & \dot \theta & \dot \psi
-    \end{bmatrixo}
+    \end{bmatrix}
     \begin{bmatrix}
-        (-1)^{i} c_{\theta}s_{\alpha} (c_{\gamma_i}c_{\psi} - s_{gamma_i} s_{\psi})\\
+        (-1)^{i} c_{\theta}s_{\alpha} (c_{\gamma_i}c_{\psi} - s_{\gamma_i} s_{\psi})\\
         (-1)^{i} s_{\alpha} (s_{\gamma_i} c_{\psi} + c_{\gamma_i} s_{\psi})\\
         0
     \end{bmatrix}
 \end{align*}
-
-
-The inertial force associated with the above motion is:
+Hence,
 \begin{align*}
-    F_g =  (-i)^{i} I_p\omega_i G(\phi, \theta, \psi) \begin{bmatrix}
-        \dot \phi \\ \dot \theta \\ \dot \psi
+    \frac{{}^R d\pmb n_i}{dt} &= {}^R \pmb \Omega^B \times \pmb n_i\\
+    &= \begin{bmatrix}
+        \dot \phi & \dot \theta & \dot \psi
     \end{bmatrix}
+    \underbrace{\begin{bmatrix}
+        (-1)^{i+1} s_{\theta} s_{\alpha} c_{\gamma_i} + s_{\psi} c_{\theta} c_{\alpha}
+        & (-1)^{i+1} s_{\theta} s_{\alpha} s_{\gamma_i} + c_{\psi} c_{\theta} c_{\alpha}
+        & (-1)^{i} c_{\theta}s_{\alpha} c_{\gamma_i + \psi}
+        \\
+        -c_{\psi} c_{\alpha}
+        & s_{\psi} c_{\alpha}
+        & (-1)^{i} s_{\alpha} s_{\gamma_i + \psi}
+        \\
+        (-1)^{i+1} s_{\alpha} c{\gamma_i}
+        & (-1)^{i+1} s_{\alpha} s_{\gamma_i}
+        & 0
+    \end{bmatrix}}_{G_i}
+    \underbrace{\begin{bmatrix}
+    \pmb b_x \\ \pmb b_y \\ \pmb b_z\\
+    \end{bmatrix}}_{\pmb b}
 \end{align*}
+
+
+The inertial moment associated with the above motion is:
+\begin{align*}
+    M_{g_i} =  I_p \times (-1)^{i} \omega_i \left[\dot \varepsilon^T  G_i \pmb b \right]
+\end{align*}
+where, $I_p$ is the moment-of-inertia matrix of the propeller.
+
+\subsubsection{Result of opposing spin for diagonally opposing propellers}
+
+The opposing propeller pairs from the given configuration are $(1, 4), (2, 5) \text{ and } (3, 6)$. From the above derivation of $G_i$ matrix, it can be concluded that it is same for opposing propeller paris (the $-ve$ sign difference due to $(-1)^i$ or $(-1)^{i+1}$ is compensated by the negative sign difference in $c_{\gamma_i} \text{ and } s_{\gamma_i}$ for the opposing propellers), i.e.,
+$$ G_{i} = G_{i+3} \qquad i = 1, 2, 3$$
+
+Hence, the opposing propellers create inertial moments along the same line but in opposing directions. Hence the difference in the propeller velocities will cause the inertial moments in that particular direction. Thus we have, the inertial moments resulting from the propeller velocity difference:
+
+\begin{align*}
+    \delta M_{g_{14}} &=   I_p \delta \omega_{14} \left[\dot \varepsilon^T  G_{1 4} \pmb b \right] \qquad \delta \omega_{14} = \omega_4 - \omega_1, \quad G_{14} = G_1 = G_4\\
+    %===
+    \delta M_{g_{25}} &=   I_p \delta \omega_{25} \left[\dot \varepsilon^T  G_{2 5} \pmb b \right] \qquad \delta \omega_{25} = \omega_5 - \omega_2, \quad G_{25} = G_2 = G_5\\
+    %==
+    \delta M_{g_{36}} &=   I_p \delta \omega_{36} \left[\dot \varepsilon^T  G_{3 6} \pmb b \right] \qquad \delta \omega_{14} = \omega_6 - \omega_3, \quad G_{36} = G_3 = G_6\\
+\end{align*}
+
+Further analysis on the magnitude of these inertia moments requires the magnitude value of $I_p$ matrix w.r.t to the drone.
