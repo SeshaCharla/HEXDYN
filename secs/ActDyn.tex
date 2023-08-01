@@ -1,0 +1,136 @@
+\section{External Forces and Force Generation Processes}
+
+\subsection{Propeller Aerodynamics}
+
+Aerodynamics are assumed to be faster than mechanical dynamics of the actuator.
+The thrust generation process due to the propagation of pressure wave is assumed to be instantaneous. This assumption is inherent to the standard models that use potential flow theory (lifting-line, blade-element and momentum-disk theories), as they assume incompressible flow.
+
+We have,
+\begin{align*}
+    \text{Propeller($i^{th}$) Thrust: } &\\
+    & F_i = C_{F_i} \omega_i^2\\
+    \text{Propeller($i^{th}$) Torque due to drag: } &\\
+    & M_i = C_{M_i} \omega_i^2
+\end{align*}
+
+\textbf{Aeroelasticity of the propeller:} It is assumed that the aeroelasticity of the propeller produces high-frequency oscillations in the thrust and torque of the propller which are assumed to be very fast and roll off w.r.t the mechanical dyanmics dyanmics of the actuator as well as the transmission through the propller shaft. The constant  bias in the torque due to flutter is captured in the drag coefficient and it's parameter uncertainity.
+
+Thus we have the propller aerodynamic model:
+\begin{align*}
+    F_i &= (C_{F_i} + \Delta C_{F_i}) \omega_i^2\\
+    M_i &= (C_{M_i} + \Delta C_{M_i}) \omega_i^2
+\end{align*}
+
+
+\subsection{BLDC-motor dynamics of the actuator}
+\subsubsection{Electrical dyanmics}
+The inductance of the BLDC motor system is neglected as it is assumed that the electrical dynamics are faster as compared to the mechanical dyanmics of the system.For $i^{th}$ propller:
+\begin{align*}
+    V_i &= e_i + RI_i + L \frac{dI_i}{dt} \implies V_i = e_i + RI_i\\
+    e &= k_e \omega_i\\
+    \implies I &= \frac{1}{R} \left( V_i - k_e \omega_i \right)
+\end{align*}
+
+\subsubsection{ESC dynamics}
+The switching dyanmics of ESCs that convert PWM signals to voltage/current are assumed to be faster than electrical dyanmics resulting in a linear transformation:
+\begin{align*}
+    V_i &= k_{esc_i} u_i + g_{esc_i}
+\end{align*}
+
+\subsubsection{Motor Torque}
+\begin{align*}
+    M_{m_i} &= k_{m_i} I_i\\
+            &= \frac{k_{m_i}}{R} \left( V_i - k_e \omega_i \right)\\
+            &= \frac{k_{m_i}}{R} \left( k_{esc_i} u_i + g_{esc_i} \right) - \frac{k_ek_{m_i}}{R} \omega_i\\
+            &= \frac{k_{esc_i}k_{m_i}}{R}  u_i  - \frac{k_ek_{m_i}}{R} \omega_i+ \frac{g_{esc_i}k_{m_i}}{R}
+\end{align*}
+
+\subsubsection{Friction}
+\begin{enumerate}
+    \item Viscous friction: $-b_i \omega_i$.
+    \item Columb friction: $-M_{f_i} \sign(\omega_i) = -M_{f_i} \qquad [\because$ the motor turns in only one direction $]$.
+\end{enumerate}
+
+
+%===============================================================================
+
+\subsection{Parametric Identification model for BLDC motor - propeller dyanmcis}
+Let, $J_i$ be the propeller moment on inertia along the normal axis. Then,
+\begin{align*}
+    J_i \dot \omega_i &= M_{m_i} - M_i - b_i \omega - M_{f_i}\\
+    &= \frac{k_{esc_i}k_{m_i}}{R}  u_i  - \frac{k_ek_{m_i}}{R} \omega_i+ \frac{g_{esc_i}k_{m_i}}{R} - C_{M_i} \omega_i^2 - b_i \omega - M_{f_i}\sign(\omega_i)\\
+    %===
+   \implies \dot \omega &= \frac{k_{esc_i}k_{m_i}}{R J_i}  u_i  - \frac{k_ek_{m_i}}{R J_i} \omega_i+ \frac{g_{esc_i}k_{m_i}}{R J_i} - \frac{C_{M_i}}{J_i} \omega_i^2 - \frac{b_i}{J_i} \omega_i - \frac{M_{f_i}}{J_i}\sign(\omega_i)\\
+   %===
+   &= - \frac{C_{M_i}}{J_i} \omega_i^2  - \left(\frac{k_ek_{m_i}}{R J_i} + \frac{b_i}{J_i} \right) \omega_i - \frac{M_{f_i}}{J_i}\sign(\omega_i) +  \frac{g_{esc_i}k_{m_i}}{R J_i} + \frac{k_{esc_i}k_{m_i}}{R J_i}  u_i
+\end{align*}
+
+Hence, we have the continuous parametric model:
+$$ \dot \omega_i = \begin{bmatrix}
+    - \omega_i^2 & - \omega_i  & - \sign(\omega_i) & 1
+\end{bmatrix}
+\begin{bmatrix}
+    \frac{C_{M_i}}{J_i} \\
+    \left(\frac{k_ek_{m_i}}{R J_i} + \frac{b_i}{J_i} \right) \\
+    \frac{M_{f_i}}{J_i}\\
+    \frac{g_{esc_i}k_{m_i}}{R J_i}
+\end{bmatrix}
+    + \frac{k_{esc_i}k_{m_i}}{R J_i}  u_i $$
+
+Descritizing the above model using euler-method $\left(\dot \omega_i = \frac{\omega_i[k+1] - \omega_i[K]}{h}\right)$, with $h$ as the sampling interval:
+
+\begin{align*}
+    \frac{\omega_i[k+1] - \omega_i[K]}{h} &=
+    \begin{bmatrix} - \omega_i^2[K] & - \omega_i[K]  & - \sign(\omega_i[k]) & 1 \end{bmatrix}
+    \begin{bmatrix}
+        \frac{C_{M_i}}{J_i} \\
+        \left(\frac{k_ek_{m_i}}{R J_i} + \frac{b_i}{J_i} \right) \\
+        \frac{M_{f_i}}{J_i}\\
+        \frac{g_{esc_i}k_{m_i}}{R J_i}
+    \end{bmatrix}
+    + \frac{k_{esc_i}k_{m_i}}{R J_i}  u_i\\
+    %===
+    \omega_i[k+1] &= h \begin{bmatrix} - \omega_i^2[k] & - \omega_i[k]  & - \sign(\omega_i[k]) & 1 \end{bmatrix}
+    \begin{bmatrix}
+        \frac{C_{M_i}}{J_i} \\
+        \left(\frac{k_ek_{m_i}}{R J_i} + \frac{b_i}{J_i} - \frac{1}{h}\right) \\
+        \frac{M_{f_i}}{J_i}\\
+        \frac{g_{esc_i}k_{m_i}}{R J_i}
+    \end{bmatrix}
+    + \frac{k_{esc_i}k_{m_i}}{R J_i}  h u_i
+\end{align*}
+
+Let,
+\begin{align*}
+    \phi_i(\omega[k]) &=
+    \begin{bmatrix}
+        - \omega_i^2[k] \\
+        - \omega_i[k]\\
+        - \sign(\omega_i[k])\\
+        1
+    \end{bmatrix}
+    \qquad \text{and} \qquad
+    \theta_i(h) = h
+    \begin{bmatrix}
+        \frac{C_{M_i}}{J_i} \\
+        \left(\frac{k_ek_{m_i}}{R J_i} + \frac{b_i}{J_i} - \frac{1}{h}\right) \\
+        \frac{M_{f_i}}{J_i}\\
+        \frac{g_{esc_i}k_{m_i}}{R J_i}\\
+        \frac{k_{esc_i}k_{m_i}}{R J_i}
+    \end{bmatrix}
+    \qquad \text{and} \qquad
+    b_{u_i}(h) &=  \frac{k_{esc_i}k_{m_i}}{R J_i}  h
+\end{align*}
+
+hence, we have the parametric form:
+\begin{align*}
+    \omega_i[k+1] &= \phi(\omega_i[k])^T \theta_i(h) + b_{u_i}(h) u_i[k]
+\end{align*}
+
+\subsubsection{Input singal (persistance of exitation and frequency limitation)}
+\textbf{Note:}
+\begin{enumerate}
+    \item PE order of a square wave of half-period m is m+1.
+    \item PE order of a single sine wave is 2.
+\end{enumerate}
+Hence, a sum of sinusoids wave with atleast 4 waves within the frequency of 45 Hz (the limitation is due to the structure) can be used to estimate the parameters and the coefficients of force and torque generated.
